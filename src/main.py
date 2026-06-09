@@ -1,7 +1,7 @@
 """
 PCA and Anomaly Detection — Manim-Slides Lecture
 =================================================
-Main entry point that imports all 16 slides and builds
+Main entry point that imports all 17 slides and builds
 the complete presentation deck.
 
 Render with:
@@ -26,6 +26,7 @@ from helpers import LIGHT_BG
 from slide_01_title import build as build_slide_01
 from slide_02_what_is_pca import build as build_slide_02
 from slide_03_unsupervised import build as build_slide_03
+from slide_04_eigen_process import build as build_slide_04_process
 from slide_04_intuition import build as build_slide_04
 from slide_05_variance import build as build_slide_05
 from slide_06_covariance import build as build_slide_06
@@ -48,10 +49,11 @@ class PCAAnomalyDeck(Slide):
         # Set light theme background (wrap in ManimColor for manim-slides compat)
         self.camera.background_color = ManimColor(LIGHT_BG)
 
-        # Build all 16 slides in order
+        # Build all 17 slides in order
         build_slide_01(self)
         build_slide_02(self)
         build_slide_03(self)
+        build_slide_04_process(self)
         build_slide_04(self)
         build_slide_05(self)
         build_slide_06(self)
