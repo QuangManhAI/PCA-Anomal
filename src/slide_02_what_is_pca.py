@@ -74,11 +74,22 @@ def build(slide):
     )
 
     # ── Bullets ───────────────────────────────────────────────────────
-    bullets = make_bullet_list([
-        "Matrix A is reduced to directions (eigenvectors v⃗) and scaling factors (eigenvalues λ)",
-        "This reduction is the core mathematical engine of PCA dimensionality reduction",
-    ], font_size=20)
-    bullets.next_to(insight_group, DOWN, buff=0.5)
+    bullet_items = [
+        "Matrix A becomes directions and importance scores",
+        "This is the math engine behind PCA dimensionality reduction",
+        "Keep high-variance directions to preserve most signal",
+        "Drop low-variance directions to remove noise and redundancy",
+        "Project to k components instead of all original features",
+        "Reconstruction error shows what PCA cannot explain",
+    ]
+    bullets = VGroup()
+    for item in bullet_items:
+        dot = Text("•", font_size=18, color=TEAL, font="Helvetica")
+        txt = Tex(item, font_size=28, color=GRAY_TEXT)
+        txt.next_to(dot, RIGHT, buff=0.18)
+        bullets.add(VGroup(dot, txt))
+    bullets.arrange(DOWN, aligned_edge=LEFT, buff=0.2)
+    bullets.next_to(insight_group, DOWN, buff=0.36)
     
     slide.play(
         LaggedStart(*[Write(b) for b in bullets], lag_ratio=0.4),

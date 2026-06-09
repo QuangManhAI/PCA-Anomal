@@ -86,7 +86,7 @@ def build(slide):
         Text("PC1", font_size=19, color=ORANGE_C, weight=BOLD, font="Arial", disable_ligatures=True),
         Text("main structure", font_size=14, color=ORANGE_C, font="Arial", disable_ligatures=True),
     ).arrange(DOWN, buff=0.02, aligned_edge=LEFT)
-    pc_label.move_to(axes.c2p(2.35, 1.95))
+    pc_label.move_to(axes.c2p(2.45, 2.55))
     pc_label_bg = BackgroundRectangle(pc_label, color=WHITE, fill_opacity=0.82, buff=0.04)
 
     anomaly_pt = (1.05, -2.55)
@@ -139,13 +139,12 @@ def build(slide):
     )
     anomaly_error_tag = Text(
         "large error",
-        font_size=14,
+        font_size=15,
         color=RED_C,
-        weight=BOLD,
-        font="Arial",
+        font="Helvetica",
         disable_ligatures=True,
     )
-    anomaly_error_tag.next_to(anomaly_dot, LEFT, buff=0.2)
+    anomaly_error_tag.move_to(axes.c2p(2.0, -2.35))
 
     # ── Error distribution mini panel ───────────────────────────────────
     error_panel = VGroup()
@@ -176,6 +175,8 @@ def build(slide):
             "color": GRAY_TEXT,
             "stroke_width": 1.4,
             "include_tip": True,
+            "tip_length": 0.05,
+            "tip_width": 0.07,
             "include_ticks": False,
         },
     )
