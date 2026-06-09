@@ -9,99 +9,121 @@ def build(slide):
     clear_slide(slide)
 
     # ── Title ────────────────────────────────────────────────────────────
-    title = make_title("What is Anomaly Detection?")
+    title = make_title("Anomaly Detection: The Gaussian Perspective")
+    slide.play(FadeIn(title), run_time=0.6)
 
-    # ── Bullet list (left side) ──────────────────────────────────────────
+    # ── Left Side: Math & Concepts ───────────────────────────────────────
     bullets = make_bullet_list([
-        "An anomaly = significantly different from normal data",
-        "Examples:",
-    ], font_size=26)
-
-    sub_items = VGroup(
-        Text("▸  Fraudulent transaction", font_size=22, color=GRAY_TEXT),
-        Text("▸  Sensor failure", font_size=22, color=GRAY_TEXT),
-        Text("▸  Corrupted image", font_size=22, color=GRAY_TEXT),
-        Text("▸  Unusual route", font_size=22, color=GRAY_TEXT),
+        "Model normal data with a probability density p(x)",
+        "Normal samples lie in high probability density regions",
+        "Anomalies lie in the tails (extremely low density)",
+    ], font_size=18)
+    
+    pdf_formula = MathTex(
+        r"p(x) = \frac{1}{\sigma \sqrt{2\pi}} e^{-\frac{(x-\mu)^2}{2\sigma^2}}",
+        font_size=24, color=NAVY
     )
-    sub_items.arrange(DOWN, aligned_edge=LEFT, buff=0.18)
-    sub_items.next_to(bullets, DOWN, aligned_edge=LEFT, buff=0.25)
-    sub_items.shift(RIGHT * 0.6)
+    
+    thresh_formula = MathTex(
+        r"\text{Anomaly if: } p(x) < \epsilon \iff \int_{\text{extreme}} p(t) dt < \alpha",
+        font_size=20, color=RED_C
+    )
 
-    text_group = VGroup(bullets, sub_items)
-    text_group.next_to(title, DOWN, buff=0.5)
-    text_group.to_edge(LEFT, buff=0.8)
+    left_group = VGroup(bullets, pdf_formula, thresh_formula).arrange(DOWN, aligned_edge=LEFT, buff=0.35)
+    left_group.to_edge(LEFT, buff=0.8)
+    left_group.shift(DOWN * 0.3)
 
-    # ── Scatter plot (right side) ────────────────────────────────────────
+    # ── Right Side: Gaussian Bell Curve ─────────────────────────────────
     axes_group = make_light_axes(
-        x_range=[-4, 4, 1], y_range=[-4, 4, 1],
-        x_length=5, y_length=4.5,
-        x_label="", y_label="",
+        x_range=[-4, 4, 1],
+        y_range=[0, 0.45, 0.1],
+        x_length=5.6,
+        y_length=3.8,
+        x_label="x",
+        y_label="p(x)"
     )
-    axes = axes_group[0]  # the Axes object
     axes_group.to_edge(RIGHT, buff=0.8)
-    axes_group.shift(DOWN * 0.5)
+    axes_group.shift(DOWN * 0.3)
+    axes = axes_group[0]
 
-    # Generate ~25 normal points in a tight cluster
-    rng = np.random.default_rng(123)
-    normal_xs = rng.normal(0, 0.8, 25)
-    normal_ys = rng.normal(0, 0.8, 25)
-    normal_points = list(zip(normal_xs.tolist(), normal_ys.tolist()))
-    normal_dots = make_scatter_points(axes, normal_points, color=BLUE_C, radius=0.06)
+    def gaussian_pdf(x):
+        return (1.0 / np.sqrt(2.0 * np.pi)) * np.exp(-x**2 / 2.0)
 
-    # 2 red anomaly points far from the cluster
-    anomaly_points = [(3.0, 2.5), (-2.8, -2.8)]
-    anomaly_dots = make_scatter_points(axes, anomaly_points, color=RED_C, radius=0.09)
+    curve = axes.plot(gaussian_pdf, x_range=[-4, 4], color=NAVY, stroke_width=3)
 
-    # Dashed warning circles around anomaly points
-    warning_circles = VGroup()
-    for ax, ay in anomaly_points:
-        circle = DashedVMobject(
-            Circle(radius=0.4, color=RED_C).move_to(axes.c2p(ax, ay)),
-            num_dashes=12,
-        )
-        circle.set_stroke(opacity=0.5)
-        warning_circles.add(circle)
+    # Shaded areas representing integrals/tail probability
+    # Normal region: [-2, 2]
+    # Tail regions: [-4, -2] and [2, 4]
+    normal_area = axes.get_area(curve, x_range=[-2, 2], color=BLUE_C, opacity=0.15)
+    left_tail = axes.get_area(curve, x_range=[-4, -2], color=RED_C, opacity=0.25)
+    right_tail = axes.get_area(curve, x_range=[2, 4], color=RED_C, opacity=0.25)
 
-    # Labels for anomaly points
-    anom_label_1 = Text("Anomaly", font_size=16, color=RED_C)
-    anom_label_1.next_to(axes.c2p(3.0, 2.5), UP, buff=0.35)
-    anom_label_2 = Text("Anomaly", font_size=16, color=RED_C)
-    anom_label_2.next_to(axes.c2p(-2.8, -2.8), DOWN, buff=0.35)
+    # Labels for regions
+    normal_label = Text("Normal Region\np(x) ≥ ε", font_size=15, color=BLUE_C)
+    normal_label.move_to(axes.c2p(0, 0.12))
 
-    normal_label = Text("Normal data", font_size=16, color=BLUE_C)
-    normal_label.next_to(axes.c2p(0, 0), DOWN, buff=0.6)
-
-    # ── Animations ───────────────────────────────────────────────────────
-    slide.play(FadeIn(title), run_time=0.8)
-    slide.play(Write(bullets), run_time=1.0)
-    slide.play(
-        LaggedStart(*[FadeIn(s, shift=RIGHT * 0.3) for s in sub_items], lag_ratio=0.2),
-        run_time=1.0,
+    tail_label = Text("Anomaly Tail\np(x) < ε", font_size=15, color=RED_C)
+    tail_label.move_to(axes.c2p(2.8, 0.18))
+    tail_arrow = Arrow(
+        start=axes.c2p(2.8, 0.15),
+        end=axes.c2p(2.4, 0.02),
+        color=RED_C,
+        stroke_width=2.5,
+        max_tip_length_to_length_ratio=0.15
     )
 
-    slide.play(Create(axes_group), run_time=0.8)
-    slide.play(
-        LaggedStart(*[FadeIn(d, scale=0.5) for d in normal_dots], lag_ratio=0.04),
-        run_time=1.2,
-    )
-    slide.play(FadeIn(normal_label), run_time=0.5)
+    # Dots representing samples
+    norm_pt = Dot(axes.c2p(0.5, gaussian_pdf(0.5)), radius=0.07, color=BLUE_C)
+    norm_pt_lbl = Text("Normal sample", font_size=12, color=BLUE_C).next_to(norm_pt, UP, buff=0.1)
 
-    # Anomaly dots with flash effect
+    anom_pt = Dot(axes.c2p(2.5, gaussian_pdf(2.5)), radius=0.07, color=RED_C)
+    anom_pt_lbl = Text("Anomaly", font_size=12, color=RED_C).next_to(anom_pt, UR, buff=0.08)
+
+    # ── Animations ──────────────────────────────────────────────────────
+    # 1. Title and Left-side text
     slide.play(
-        FadeIn(anomaly_dots[0], scale=1.5),
-        FadeIn(anomaly_dots[1], scale=1.5),
-        run_time=0.8,
+        LaggedStart(*[Write(b) for b in bullets], lag_ratio=0.3),
+        run_time=1.0
+    )
+    slide.play(Write(pdf_formula), run_time=0.8)
+    slide.play(Write(thresh_formula), run_time=0.8)
+    slide.wait(0.3)
+
+    # 2. Right-side Axes & Gaussian Curve
+    slide.play(Create(axes_group), run_time=0.6)
+    slide.play(Create(curve), run_time=1.0)
+    slide.wait(0.3)
+
+    # 3. Shaded Regions & Labels
+    slide.play(
+        FadeIn(normal_area),
+        FadeIn(normal_label),
+        run_time=0.6
     )
     slide.play(
-        Flash(anomaly_dots[0], color=RED_C, flash_radius=0.4, num_lines=8),
-        Flash(anomaly_dots[1], color=RED_C, flash_radius=0.4, num_lines=8),
-        run_time=0.6,
+        FadeIn(left_tail),
+        FadeIn(right_tail),
+        FadeIn(tail_label, shift=LEFT * 0.1),
+        GrowArrow(tail_arrow),
+        run_time=0.8
+    )
+    slide.wait(0.5)
+
+    # 4. Sample Points with Indicators
+    slide.play(
+        FadeIn(norm_pt, scale=1.5),
+        FadeIn(norm_pt_lbl),
+        run_time=0.6
     )
     slide.play(
-        Create(warning_circles),
-        FadeIn(anom_label_1),
-        FadeIn(anom_label_2),
-        run_time=0.8,
+        FadeIn(anom_pt, scale=1.5),
+        FadeIn(anom_pt_lbl),
+        run_time=0.6
     )
+    slide.play(
+        Flash(anom_pt, color=RED_C, flash_radius=0.35, num_lines=8),
+        run_time=0.6
+    )
+    slide.wait(1.0)
 
     slide.next_slide()

@@ -30,12 +30,12 @@ def make_title(text, subtitle=None):
     return VGroup(title)
 
 
-def make_bullet_list(items, font_size=28, color=GRAY_TEXT):
+def make_bullet_list(items, font_size=28, color=GRAY_TEXT, font="Arial"):
     """Create a vertical bullet-point list."""
     bullets = VGroup()
     for item in items:
-        dot = Text("•", font_size=font_size, color=TEAL)
-        txt = Text(item, font_size=font_size, color=color)
+        dot = Text("•", font_size=font_size, color=TEAL, font=font, disable_ligatures=True)
+        txt = Text(item, font_size=font_size, color=color, font=font, disable_ligatures=True)
         txt.next_to(dot, RIGHT, buff=0.2)
         row = VGroup(dot, txt)
         bullets.add(row)
