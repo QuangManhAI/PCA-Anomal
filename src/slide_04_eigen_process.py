@@ -102,14 +102,14 @@ def build(slide):
     )
     transformed_y_axis.set_opacity(0.82)
     transformed_x_label = MathTex(r"A\vec{e}_1", font_size=20, color=TEAL)
-    transformed_x_label.next_to(transformed_x_axis.get_end(), DR, buff=0.04)
+    transformed_x_label.move_to(axes.c2p(2.65, 0.28))
     transformed_y_label = MathTex(r"A\vec{e}_2", font_size=20, color=TEAL)
-    transformed_y_label.next_to(transformed_y_axis.get_end(), UL, buff=0.04)
+    transformed_y_label.move_to(axes.c2p(0.58, 2.78))
     square_label = phrase_text("Unit square", font_size=25, color=GRAY_TEXT)
     square_label.move_to(axes.c2p(0.52, -0.36))
     square_label_bg = BackgroundRectangle(square_label, color=WHITE, fill_opacity=0.8, buff=0.04)
-    para_label = phrase_text("Parallelogram after $A$", font_size=23, color=TEAL)
-    para_label.next_to(parallelogram, UP, buff=0.1)
+    para_label = phrase_text("Parallelogram after $A$", font_size=20, color=TEAL)
+    para_label.move_to(axes.c2p(1.72, 2.42))
 
     transform_note = phrase_text(
         r"Unit square $\rightarrow$ parallelogram after transformation",
@@ -130,8 +130,8 @@ def build(slide):
         max_tip_length_to_length_ratio=0.12,
     ).set_opacity(0.62)
 
-    normal_label = phrase_text("One ordinary vector", font_size=22, color=BLUE_C)
-    normal_label.move_to(axes.c2p(-0.72, 2.35))
+    normal_label = phrase_text("One ordinary vector", font_size=20, color=BLUE_C)
+    normal_label.move_to(axes.c2p(-1.18, 2.75))
     normal_label_bg = BackgroundRectangle(normal_label, color=WHITE, fill_opacity=0.84, buff=0.05)
 
     # ── Eigenvector: same line, different length ────────────────────────
@@ -171,10 +171,10 @@ def build(slide):
 
     eigen_caption = phrase_text(
         "Eigenvector: same direction, different length",
-        font_size=23,
+        font_size=20,
         color=PURPLE_C,
     )
-    eigen_caption.move_to(axes.c2p(0.9, -1.25))
+    eigen_caption.move_to(axes.c2p(0.88, -1.47))
     eigen_caption_bg = BackgroundRectangle(eigen_caption, color=WHITE, fill_opacity=0.86, buff=0.05)
 
     # ── Right: formula panel ────────────────────────────────────────────

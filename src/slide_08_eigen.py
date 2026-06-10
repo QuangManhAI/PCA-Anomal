@@ -13,32 +13,32 @@ def build(slide):
     slide.play(FadeIn(title), run_time=0.6)
 
     # ── Left Side: Vertical Journey ──────────────────────────────────────
-    step1_lbl = Text("Step 1: Compute variances & covariances", font_size=15, color=NAVY, weight=BOLD)
-    step1_math = MathTex(r"\mathrm{Var}(X),\; \mathrm{Cov}(X,Y)", font_size=20, color=GRAY_TEXT)
-    step1 = VGroup(step1_lbl, step1_math).arrange(DOWN, buff=0.08)
+    step1_lbl = Text("Step 1: Compute variances & covariances", font_size=18, color=NAVY, weight=BOLD)
+    step1_math = MathTex(r"\mathrm{Var}(X),\; \mathrm{Cov}(X,Y)", font_size=23, color=GRAY_TEXT)
+    step1 = VGroup(step1_lbl, step1_math).arrange(DOWN, buff=0.09)
 
-    arr1 = MathTex(r"\downarrow", font_size=20, color=TEAL)
+    arr1 = MathTex(r"\downarrow", font_size=23, color=TEAL)
 
-    step2_lbl = Text("Step 2: Build covariance matrix", font_size=15, color=NAVY, weight=BOLD)
+    step2_lbl = Text("Step 2: Build covariance matrix", font_size=18, color=NAVY, weight=BOLD)
     step2_math = MathTex(
         r"\Sigma = \begin{bmatrix} \mathrm{Var}(x_1) & \mathrm{Cov}(x_1,x_2) \\ \mathrm{Cov}(x_2,x_1) & \mathrm{Var}(x_2) \end{bmatrix}",
-        font_size=20, color=GRAY_TEXT
+        font_size=23, color=GRAY_TEXT
     )
-    step2 = VGroup(step2_lbl, step2_math).arrange(DOWN, buff=0.08)
+    step2 = VGroup(step2_lbl, step2_math).arrange(DOWN, buff=0.09)
 
-    arr2 = MathTex(r"\downarrow", font_size=20, color=TEAL)
+    arr2 = MathTex(r"\downarrow", font_size=23, color=TEAL)
 
-    step3_lbl = Text("Step 3: Eigendecomposition", font_size=15, color=NAVY, weight=BOLD)
-    step3_math = MathTex(r"\Sigma\vec{v} = \lambda\vec{v}", font_size=22, color=GRAY_TEXT)
-    step3 = VGroup(step3_lbl, step3_math).arrange(DOWN, buff=0.08)
+    step3_lbl = Text("Step 3: Eigendecomposition", font_size=18, color=NAVY, weight=BOLD)
+    step3_math = MathTex(r"\Sigma\vec{v} = \lambda\vec{v}", font_size=25, color=GRAY_TEXT)
+    step3 = VGroup(step3_lbl, step3_math).arrange(DOWN, buff=0.09)
 
-    arr3 = MathTex(r"\downarrow", font_size=20, color=TEAL)
+    arr3 = MathTex(r"\downarrow", font_size=23, color=TEAL)
 
-    step4_lbl = Text("Result: Principal Components!", font_size=16, color=TEAL, weight=BOLD)
+    step4_lbl = Text("Result: Principal Components!", font_size=20, color=TEAL, weight=BOLD)
 
-    left_flow = VGroup(step1, arr1, step2, arr2, step3, arr3, step4_lbl).arrange(DOWN, buff=0.15)
-    left_flow.to_edge(LEFT, buff=0.8)
-    left_flow.shift(DOWN * 0.4)
+    left_flow = VGroup(step1, arr1, step2, arr2, step3, arr3, step4_lbl).arrange(DOWN, buff=0.16)
+    left_flow.to_edge(LEFT, buff=0.45)
+    left_flow.shift(DOWN * 0.28)
 
     # Animate Left Side
     slide.play(FadeIn(step1), run_time=0.5)
@@ -51,8 +51,8 @@ def build(slide):
     axes = Axes(
         x_range=[-4, 4, 1],
         y_range=[-3, 3, 1],
-        x_length=5.0,
-        y_length=3.6,
+        x_length=7.7,
+        y_length=5.65,
         axis_config={
             "color": GRAY_TEXT,
             "stroke_width": 1.5,
@@ -60,11 +60,10 @@ def build(slide):
             "include_ticks": False,
         },
     )
-    axes.to_edge(RIGHT, buff=0.8)
-    axes.shift(UP * 0.3)
+    axes.move_to(RIGHT * 2.75 + UP * 0.34)
 
     data = generate_correlated_data(n=30, angle_deg=35, spread=0.4, seed=42)
-    scatter = make_scatter_points(axes, data, color=BLUE_C, radius=0.05)
+    scatter = make_scatter_points(axes, data, color=BLUE_C, radius=0.065)
 
     # Covariance Ellipse
     x_scale = axes.x_axis.get_unit_size()
@@ -89,8 +88,9 @@ def build(slide):
         color=ORANGE_C, stroke_width=5, buff=0,
         max_tip_length_to_length_ratio=0.1
     )
-    pc1_label = Text("PC₁ (λ₁ = 3.62)", font_size=14, color=ORANGE_C, weight=BOLD)
-    pc1_label.next_to(pc1_arrow.get_end(), UR, buff=0.08)
+    pc1_label = Text("PC₁ (λ₁ = 3.62)", font_size=17, color=ORANGE_C, weight=BOLD)
+    pc1_label.move_to(axes.c2p(2.9, 1.95))
+    pc1_label_bg = BackgroundRectangle(pc1_label, color=WHITE, fill_opacity=0.82, buff=0.04)
 
     angle2 = angle1 + np.pi / 2
     pc2_len = 0.9
@@ -99,14 +99,15 @@ def build(slide):
         color=PURPLE_C, stroke_width=4, buff=0,
         max_tip_length_to_length_ratio=0.15
     )
-    pc2_label = Text("PC₂ (λ₂ = 0.38)", font_size=14, color=PURPLE_C, weight=BOLD)
-    pc2_label.next_to(pc2_arrow.get_end(), UL, buff=0.08)
+    pc2_label = Text("PC₂ (λ₂ = 0.38)", font_size=17, color=PURPLE_C, weight=BOLD)
+    pc2_label.move_to(axes.c2p(-1.6, 1.45))
+    pc2_label_bg = BackgroundRectangle(pc2_label, color=WHITE, fill_opacity=0.82, buff=0.04)
 
     # Bottom Right Insight
-    insight_text1 = Text("Large λ₁ → PC₁ captures 90% variance (KEEP)", font_size=14, color=GREEN_C, weight=BOLD)
-    insight_text2 = Text("Small λ₂ → PC₂ captures 10% variance (DROP)", font_size=14, color=GRAY_TEXT)
-    insight_box = VGroup(insight_text1, insight_text2).arrange(DOWN, aligned_edge=LEFT, buff=0.1)
-    insight_box.next_to(axes, DOWN, buff=0.4)
+    insight_text1 = Text("Large λ₁ → PC₁ captures 90% variance (KEEP)", font_size=17, color=GREEN_C, weight=BOLD)
+    insight_text2 = Text("Small λ₂ → PC₂ captures 10% variance (DROP)", font_size=17, color=GRAY_TEXT)
+    insight_box = VGroup(insight_text1, insight_text2).arrange(DOWN, aligned_edge=LEFT, buff=0.12)
+    insight_box.next_to(axes, DOWN, buff=0.28)
     insight_box.align_to(axes, LEFT)
 
     # Animate Right Side
@@ -117,8 +118,8 @@ def build(slide):
     )
     slide.play(Create(ellipse), run_time=0.6)
     
-    slide.play(GrowArrow(pc1_arrow), FadeIn(pc1_label), run_time=0.6)
-    slide.play(GrowArrow(pc2_arrow), FadeIn(pc2_label), run_time=0.6)
+    slide.play(GrowArrow(pc1_arrow), FadeIn(pc1_label_bg), FadeIn(pc1_label), run_time=0.6)
+    slide.play(GrowArrow(pc2_arrow), FadeIn(pc2_label_bg), FadeIn(pc2_label), run_time=0.6)
     slide.wait(0.3)
 
     # Highlight PC1

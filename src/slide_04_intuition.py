@@ -101,13 +101,13 @@ def build(slide):
     v_scaled_label.next_to(v_scaled_arrow.get_end(), UR, buff=0.08)
 
     # Explanatory text side
-    plot_label = Text("Geometric Interpretation:", font_size=18, color=NAVY, weight=BOLD)
-    plot_desc1 = Text("• Eigenvector v⃗ points along data spread", font_size=15, color=GRAY_TEXT)
-    plot_desc2 = Text("• Matrix multiplication scales v⃗ by λ", font_size=15, color=GRAY_TEXT)
-    plot_desc3 = Text("• Arrow length scales, direction stays constant!", font_size=15, color=TEAL, weight=BOLD)
-    plot_descs = VGroup(plot_label, plot_desc1, plot_desc2, plot_desc3).arrange(DOWN, aligned_edge=LEFT, buff=0.12)
-    plot_descs.next_to(axes_group, RIGHT, buff=0.6)
-    plot_descs.shift(UP * 0.1)
+    plot_label = Text("Geometric Interpretation:", font_size=24, color=NAVY, weight=BOLD, font="Arial", disable_ligatures=True)
+    plot_desc1 = Text("• Eigenvector v⃗ points along data spread", font_size=19, color=GRAY_TEXT, font="Arial", disable_ligatures=True)
+    plot_desc2 = Text("• Matrix multiplication scales v⃗ by λ", font_size=19, color=GRAY_TEXT, font="Arial", disable_ligatures=True)
+    plot_desc3 = Text("• Arrow length scales, direction stays constant!", font_size=19, color=TEAL, weight=BOLD, font="Arial", disable_ligatures=True)
+    plot_descs = VGroup(plot_label, plot_desc1, plot_desc2, plot_desc3).arrange(DOWN, aligned_edge=LEFT, buff=0.18)
+    plot_descs.next_to(axes_group, RIGHT, buff=0.95)
+    plot_descs.shift(RIGHT * 0.35 + UP * 0.12)
 
     # Animate bottom section
     slide.play(Create(axes_group), run_time=0.6)
