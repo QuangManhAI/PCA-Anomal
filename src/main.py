@@ -1,7 +1,7 @@
 """
 PCA and Anomaly Detection — Manim-Slides Lecture
 =================================================
-Main entry point that imports all 17 slides and builds
+Main entry point that imports all lecture sections and builds
 the complete presentation deck.
 
 Render with:
@@ -39,17 +39,39 @@ from slide_12_reconstruction import build as build_slide_12
 from slide_13_anomaly_intro import build as build_slide_13
 from slide_14_pca_anomaly import build as build_slide_14
 from slide_15_full_example import build as build_slide_15
+from slide_17_pca_notebook_code import build as build_slide_17
+from slide_18_gaussian_notebook_code import build as build_slide_18
 from slide_16_summary import build as build_slide_16
 
 
 class PCAAnomalyDeck(Slide):
     """Complete PCA and Anomaly Detection lecture deck."""
 
+    def play(self, *args, **kwargs):
+        result = super().play(*args, **kwargs)
+        if not getattr(self, "_suppress_auto_step", False):
+            self._has_step_animation = True
+            self.next_slide()
+        return result
+
+    def wait(self, *args, **kwargs):
+        self._suppress_auto_step = True
+        try:
+            return super().wait(*args, **kwargs)
+        finally:
+            self._suppress_auto_step = False
+
+    def next_slide(self, *args, **kwargs):
+        if not getattr(self, "_has_step_animation", False):
+            return
+        self._has_step_animation = False
+        return super().next_slide(*args, **kwargs)
+
     def construct(self):
         # Set light theme background (wrap in ManimColor for manim-slides compat)
         self.camera.background_color = ManimColor(LIGHT_BG)
 
-        # Build all 17 slides in order
+        # Build all slide sections in order
         build_slide_01(self)
         build_slide_02(self)
         build_slide_03(self)
@@ -63,7 +85,9 @@ class PCAAnomalyDeck(Slide):
         build_slide_10(self)
         build_slide_11(self)
         build_slide_12(self)
-        build_slide_13(self)
         build_slide_14(self)
+        build_slide_17(self)
+        build_slide_13(self)
+        build_slide_18(self)
         build_slide_15(self)
         build_slide_16(self)

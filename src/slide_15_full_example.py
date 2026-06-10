@@ -79,12 +79,14 @@ def build(slide):
     error_axes = Axes(
         x_range=[0, 2.0, 0.5],
         y_range=[0, 4.0, 1.0],
-        x_length=4.0,
+        x_length=3.25,
         y_length=1.4,
         axis_config={
             "color": GRAY_TEXT,
             "stroke_width": 1.5,
             "include_tip": True,
+            "tip_length": 0.08,
+            "tip_width": 0.05,
             "include_ticks": False,
         }
     )
@@ -215,12 +217,12 @@ def build(slide):
     )
 
     bridge_arrow = Arrow(
-        error_axes.get_right() + RIGHT * 0.15,
-        detector_steps.get_left() + LEFT * 0.1,
+        RIGHT * 0.05 + DOWN * 1.45,
+        detector_steps.get_left() + LEFT * 0.12 + DOWN * 0.42,
         color=TEAL,
         stroke_width=3,
         buff=0.05,
-        max_tip_length_to_length_ratio=0.12,
+        max_tip_length_to_length_ratio=0.10,
     )
     bridge_label = Text("PCA gives e", font_size=14, color=TEAL, weight=BOLD)
     bridge_label.next_to(bridge_arrow, UP, buff=0.08)
